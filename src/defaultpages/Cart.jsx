@@ -1,10 +1,10 @@
 // src/pages/Cart.jsx
 import React, { useState } from "react";
-import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
-import Products  from "../../db/Products"; // make sure path is correct
+import { Container, Row, Col, Card, Button, Form, CloseButton } from "react-bootstrap";
+import Products  from "../db/Products"; // make sure path is correct
 import { Cart as CartIcon } from "react-bootstrap-icons";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const Cart = () => {
   // We'll keep track of quantities in state
@@ -78,11 +78,12 @@ const Cart = () => {
                 </Col>
                 <Col md={1}>
                   <Button
-                    variant="danger"
-                    size="sm"
+                    variant=" "
+                    size="lg"
                     onClick={() => handleRemove(item.id)}
+                    className="rounded-circle"
                   >
-                    X
+                    <CloseButton/>
                   </Button>
                 </Col>
               </Row>

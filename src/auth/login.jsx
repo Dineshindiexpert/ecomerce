@@ -6,7 +6,7 @@ import banner from "../assets/images/homebanner.webp";
 
 const Login = () => {
   const [validated, setValidated] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
  const handleSubmit = (event) => {
     const form = event.currentTarget;
     event.preventDefault();  
@@ -14,11 +14,12 @@ const Login = () => {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-       
-      navigate("/Home");
+      localStorage.setItem("isLoggedIn", "true"); 
+      window.location.href = "/"; 
     }
 
     setValidated(true);
+    
   };
 
 

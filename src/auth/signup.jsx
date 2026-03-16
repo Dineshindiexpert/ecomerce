@@ -16,6 +16,7 @@ const Signup = () => {
     }
 
     setValidated(true);
+    localStorage.SETtItem("isLoggedIn", "true");
   };
 
   return (
