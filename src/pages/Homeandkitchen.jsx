@@ -5,7 +5,7 @@ import Products from '../db/Products'
 const Homeandkitchen = () => {
   return (
     <div className='my-3'>
-      <h3>this our home and kitchen here.</h3>
+      <h3>This our home and kitchen here.</h3>
       <div>
         {/* HORIZONTAL SCROLL */}
         <div className="d-flex flex-row flex-nowrap overflow-auto pb-3">

@@ -1,24 +1,12 @@
 import React, { useState } from "react";
-import {
-  Accordion,
-  Badge,
-  Col,
-  Container,
-  Form,
-  ListGroup,
-  ProgressBar,
-  Row,
-  Card
-} from "react-bootstrap";
+import {Accordion,Badge,Col,Container,Form,ListGroup,ProgressBar,Row} from "react-bootstrap";
 import { Link, Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import { Category, Price } from "../db/comondatabase";
 import { ChevronRight, CurrencyRupee, Tag } from "react-bootstrap-icons";
 import { motion } from "framer-motion";
 import Footer from "../components/Footer";
-import ProductCard from "../components/Productcard";
-import Products from "../db/Products";
-import Pagination from "../components/Pagination";
+ 
 
 
 const Home = () => {
@@ -111,7 +99,7 @@ const Home = () => {
                     {/* PRICE BAR */}
                     <ProgressBar
                       now={price}
-                      variant="success"
+                      variant="primary"
                       className="rounded-pill"
                       label={`₹${price}`}
                     />

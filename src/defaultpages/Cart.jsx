@@ -7,7 +7,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const Cart = () => {
-  // We'll keep track of quantities in state
+   
   const [cartItems, setCartItems] = useState(
     Products.slice(0, 3).map((product) => ({
       ...product,
@@ -34,7 +34,7 @@ const Cart = () => {
 
   return (
     <Container className="my-5">
-      <Header/>
+      {/* <Header/> */}
       <h2 className="mb-4">
         <CartIcon className="me-2" />
         Shopping Cart
@@ -94,7 +94,7 @@ const Cart = () => {
           <Button variant="success">Proceed to Checkout</Button>
         </>
       )}
-      <Footer/>
+      {/* <Footer/> */}
     </Container>
   );
 };

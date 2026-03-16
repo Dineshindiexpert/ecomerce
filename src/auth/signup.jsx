@@ -23,7 +23,7 @@ const Signup = () => {
     <div
       style={{
         minHeight: "100vh",
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${banner})`,
+        backgroundImage:`url(${banner})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",

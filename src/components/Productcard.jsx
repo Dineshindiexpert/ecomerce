@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Button, Badge } from "react-bootstrap";
 import { StarFill, Cart, LightningFill } from "react-bootstrap-icons";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   if (!product) return null;
@@ -13,16 +13,16 @@ const ProductCard = ({ product }) => {
   const rating = product.rating || { rate: 0, count: 0 };
   const image = product.image || "";
 
-   
+
   const slug = title
     .toLowerCase()
-    .replace(/\s+/g, "-")  
-    .replace(/[^\w-]+/g, ""); 
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "");
 
   return (
     <motion.div whileHover={{ scale: 1.04 }}>
       <Card className="h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-        
+
         {/* Image Section: Wrap with Link */}
         <Link to={`/product/${slug}`} style={{ textDecoration: 'none' }}>
           <div className="bg-light p-3 text-center position-relative">
@@ -42,8 +42,8 @@ const ProductCard = ({ product }) => {
 
         {/* BODY */}
         <Card.Body className="d-flex flex-column">
-          
-          
+
+
           <Link to={`/product/${slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <Card.Title className="fw-semibold small">
               {title.length > 50 ? title.slice(0, 50) + "..." : title}
@@ -51,15 +51,23 @@ const ProductCard = ({ product }) => {
           </Link>
 
           {/* RATING */}
-          <div className="d-flex align-items-center mb-2">
-            <StarFill className="text-warning me-1" />
-            <small className="text-muted">
-              {rating.rate} ({rating.count})
-            </small>
+          <div className="d-flex align-items-center mb-2 justify-content-between">
+            <div>
+
+              <StarFill className="text-warning me-1" />
+              <small className="text-muted">
+                {rating.rate} ({rating.count})
+              </small>
+            </div>
+            <div>
+
+              {/* PRICE */}
+              <h5 className="text-primary fw-bold mb-3 align-items-center">₹{price}</h5>
+            </div>
           </div>
 
-          {/* PRICE */}
-          <h5 className="text-primary fw-bold mb-3">₹{price}</h5>
+
+
 
           {/* BUTTONS */}
           <div className="d-grid gap-2 mt-auto">
@@ -68,7 +76,7 @@ const ProductCard = ({ product }) => {
               Add to Cart
             </Button>
 
-            
+
             <Link to={`/product/${slug}`} className="d-grid text-decoration-none">
               <Button variant="warning" className="w-100">
                 <LightningFill className="me-2" />
