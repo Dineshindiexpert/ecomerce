@@ -1,45 +1,65 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import Pagination from '../components/Pagination'
 import ProductCard from '../components/Productcard'
-import Products from '../db/Products'
+import Loading from '../components/Loading'
 
 const Dashboard = () => {
-    return (
-        <div>
-            <h3>Hero section</h3>
-            <div>
-                <Pagination />
-            </div>
-            <h3 className="mb-3 text-center py-2">Our Products</h3>
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-            {/* HORIZONTAL SCROLL */}
-            <div className="d-flex flex-row flex-nowrap overflow-auto pb-3">
-                {Products.map((product) => (
-                    <div
-                        key={product.id}
-                        className="me-3"
-                        style={{ minWidth: "220px" }}
-                    >
-                        <ProductCard product={product} />
-                    </div>
-                ))}
-            </div>
-            <h3 className="mb-3 text-center py-2">Our Products</h3>
-            <div className="d-flex flex-row   overflow-auto pb-3">
-                {Products.map((product) => (
-                    <div
-                        key={product.id}
-                        className="me-3"
-                        style={{ minWidth: "220px" }}
-                    >
-                        <ProductCard product={product} />
-                    </div>
-                ))}
-            </div>
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+
+                const res = await axios.get('https://dummyjson.com/products');
 
 
-        </div >
-    )
+                if (res.data && res.data.products) {
+
+                    const formattedProducts = res.data.products.map(p => ({
+                        ...p,
+                        image: p.thumbnail,
+                        rating: { rate: p.rating, count: p.stock }
+                    }));
+                    setProducts(formattedProducts);
+                }
+            } catch (err) {
+                console.error("API Error:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, []);
+    
+    return (<>
+        {loading ? <Loading /> :
+            <div className="container-fluid px-4 bg-light min-vh-100">
+                <h3 className="py-3">Hero Section</h3>
+                <div className="mb-4"><Pagination /></div>
+
+                <h3 className="mb-3 text-center py-2 fw-bold">Our Products</h3>
+                <div className="d-flex flex-row flex-nowrap overflow-auto pb-4 pt-2">
+                    {products.map((product) => (
+                        <div key={product.id} className="me-3" style={{ minWidth: "250px" }}>
+                            <ProductCard product={product} />
+                        </div>
+                    ))}
+                </div>
+
+                <h3 className="my-4 text-center py-2 fw-bold">Best Sellers</h3>
+                <div className="d-flex flex-row flex-nowrap overflow-auto pb-4 pt-2">
+                    {[...products].reverse().map((product) => (
+                        <div key={`rev-${product.id}`} className="me-3" style={{ minWidth: "250px" }}>
+                            <ProductCard product={product} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        }
+
+    </>)
 }
 
 export default Dashboard

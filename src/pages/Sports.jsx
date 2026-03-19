@@ -1,6 +1,6 @@
 import React from 'react'
 import ProductCard from '../components/Productcard'
-import Products from '../db/Products'
+// import Products from '../db/Products'
 
 const Sports = () => {
   return (

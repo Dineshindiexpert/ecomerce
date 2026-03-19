@@ -18,7 +18,11 @@ import Beautyproducts from "../pages/Beautyproducts";
 
 import Productdetails from "../components/Productdetails";
 import Protectroutes from "../auth/Protectroutes";
-
+import Apicalling from "../pages/apicalling";
+import Wishlist from "../pages/Wishlist";
+import Loading from "../components/Loading";
+// import Apicalling from "../pages/Apicalling";
+ 
 const AppRoutes = () => {
   const isAuthenticated = localStorage.getItem("isLoggedIn") === "true";
 
@@ -53,6 +57,11 @@ const AppRoutes = () => {
 
           <Route path="product/:slug" element={<Productdetails />} />
           <Route path="cart" element={<Cart />} />
+          <Route path='/API' element={<Apicalling/>}/>
+          <Route path='/wishlist' element={<Wishlist/>}/>
+           <Route path='/loading' element={<Loading/>}/>
+
+
         </Route>
 
       </Route>

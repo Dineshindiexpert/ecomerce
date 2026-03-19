@@ -41,7 +41,7 @@ const Header = () => {
             </InputGroup>
 
             {/* Wishlist */}
-            <Nav.Link className="icon-btn">
+            <Nav.Link as={Link} to='/wishlist' className="icon-btn">
               <Heart size={20} />
             </Nav.Link>
 
