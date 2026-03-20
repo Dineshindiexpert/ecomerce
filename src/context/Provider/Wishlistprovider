@@ -1,0 +1,16 @@
+import { useState, useEffect } from "react";
+import { WishlistContext } from "../Context";
+
+const WishlistProvider = ({ children }) => {
+  const [wishlistContextValue, setWishlistContextValue] = useState([]);
+
+  return (
+    <WishlistContext.Provider
+      value={{ wishlistContextValue, setWishlistContextValue }}
+    >
+      {children}
+    </WishlistContext.Provider>
+  );
+};
+
+export default WishlistProvider;

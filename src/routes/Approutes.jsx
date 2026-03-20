@@ -55,7 +55,7 @@ const AppRoutes = () => {
           <Route path="beauty" element={<Beautyproducts />} />
           <Route path="books" element={<Books />} />
 
-          <Route path="product/:slug" element={<Productdetails />} />
+          <Route path="product/:id" element={<Productdetails />} />
           <Route path="cart" element={<Cart />} />
           <Route path='/API' element={<Apicalling/>}/>
           <Route path='/wishlist' element={<Wishlist/>}/>
