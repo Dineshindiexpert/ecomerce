@@ -10,7 +10,7 @@ const Wishlist = () => {
 
 
       <Card key={1} className="mb-3 p-3">
-        <h6>fist card</h6>
+        <h6>fist card</h6>.
         <p>₹15000</p>
         <Button variant="danger" >
           Remove
