@@ -5,8 +5,12 @@ import { Cart, Heart, Search } from "react-bootstrap-icons";
 import Hoverdropdown from "./Hoverdropdown";
 import { Category, Profile } from "../db/comondatabase";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const wishlistItems = useSelector((state) => state.wishlist.wishlistItems);
+  
+  const cartItems = useSelector((state) => state.cart.cartItems);
   return (
     <Navbar expand="lg" sticky="top" className="py-3" bg='transparent'>
       <Container>
@@ -41,15 +45,18 @@ const Header = () => {
             </InputGroup>
 
             {/* Wishlist */}
-            <Nav.Link as={Link} to='/wishlist' className="icon-btn">
+            <Nav.Link as={Link} to='/wishlist' className="icon-btn position-relative">
               <Heart size={20} />
+              <Badge bg="danger" pill className="position-absolute top-0 start-100 translate-middle">
+                {wishlistItems.length}
+              </Badge>
             </Nav.Link>
 
             {/* Cart */}
             <Nav.Link as={Link} to="/cart" className="position-relative icon-btn">
               <Cart size={22} />
               <Badge bg="danger" pill className="position-absolute top-0 start-100 translate-middle">
-                1
+                {cartItems.length}
               </Badge>
             </Nav.Link>
 

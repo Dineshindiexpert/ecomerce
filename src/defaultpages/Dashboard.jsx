@@ -7,6 +7,7 @@ import Loading from '../components/Loading'
 const Dashboard = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+   
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -32,7 +33,7 @@ const Dashboard = () => {
         };
         fetchProducts();
     }, []);
-    
+
     return (<>
         {loading ? <Loading /> :
             <div className="container-fluid px-4 bg-light min-vh-100">

@@ -3,11 +3,18 @@ import { Card, Button, Badge } from "react-bootstrap";
 import { StarFill, Cart, LightningFill } from "react-bootstrap-icons";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToWishlist, removeFromWishlist } from "../store/slice/Wishlistslice";
+import { addToCart } from "../store/slice/CartSlice";
 
 const ProductCard = ({ product }) => {
+  const dispatch = useDispatch();
+  const handleButtonClick = (product) => {
+    dispatch(addToWishlist(product));
+  };
   if (!product) return null;
 
-  // Use product.id for routing
+
   const productLink = `/product/${product.id}`;
 
   return (
@@ -44,8 +51,10 @@ const ProductCard = ({ product }) => {
           </div>
 
           <div className="d-grid gap-2 mt-auto">
-            <Button variant="outline-danger">🤍 Wishlist</Button>
-            <Button variant="outline-dark"><Cart className="me-2" /> Add to Cart</Button>
+            <Button onClick={() => handleButtonClick(product)} variant="outline-danger"> Wishlist</Button>
+            <Button
+              onClick={() => dispatch(addToCart(product))}
+              variant="outline-dark"><Cart className="me-2" /> Add to Cart</Button>
             <Link to={productLink} className="d-grid text-decoration-none">
               <Button variant="warning"><LightningFill className="me-2" /> Buy Now</Button>
             </Link>
