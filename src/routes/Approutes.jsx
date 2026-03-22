@@ -2,24 +2,24 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../auth/login";
 import Signup from "../auth/signup";
 
-import Home from "../defaultpages/Home";
+import Home from "../pages/Home";
 import Dashboard from "../defaultpages/Dashboard";
 import Cart from "../defaultpages/Cart";
-import NotFound from "../defaultpages/NotFound";
+import NotFound from "../pages/NotFound";
 
-import Electronics from "../pages/Electronics";
-import Sports from "../pages/Sports";
-import Clothes from "../pages/Clothes";
-import Toys from "../pages/Toys";
-import Gifts from "../pages/Gifts";
-import Books from "../pages/Books";
-import Homeandkitchen from "../pages/Homeandkitchen";
-import Beautyproducts from "../pages/Beautyproducts";
+import Electronics from "../components/Electronics";
+import Sports from "../components/Sports";
+import Clothes from "../components/Clothes";
+import Toys from "../components/Toys";
+import Gifts from "../components/Gifts";
+import Books from "../components/Books";
+import Homeandkitchen from "../components/Homeandkitchen";
+import Beautyproducts from "../components/Beautyproducts";
 
 import Productdetails from "../components/Productdetails";
 import Protectroutes from "../auth/Protectroutes";
-import Apicalling from "../pages/apicalling";
-import Wishlist from "../pages/Wishlist";
+import Apicalling from "../api/Apicalling";
+import Wishlist from "../defaultpages/Wishlist";
 import Loading from "../components/Loading";
 // import Apicalling from "../pages/Apicalling";
  

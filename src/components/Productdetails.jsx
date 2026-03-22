@@ -4,9 +4,13 @@ import { Container, Row, Col, Button, Badge, Spinner } from "react-bootstrap";
 import { StarFill, CartPlus, LightningFill, ArrowLeft, ShieldCheck, Truck, ArrowRepeat } from "react-bootstrap-icons";
 import { motion } from "framer-motion";
 import { apiService } from "../api";
-import Loading from "../components/Loading"; 
+import Loading from "../components/Loading";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/slice/CartSlice";
 const ProductDetails = () => {
-  const { id } = useParams();  
+  // redux calling
+  const dispatch = useDispatch();
+  const { id } = useParams();
   console.log(id)
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
@@ -30,7 +34,7 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  if (loading) return <Loading />;  
+  if (loading) return <Loading />;
 
   if (!product) {
     return (
@@ -115,7 +119,9 @@ const ProductDetails = () => {
             </Row>
 
             <div className="d-flex gap-3">
-              <Button variant="outline-dark" className="flex-grow-1 py-2 fw-bold">
+              <Button variant="outline-dark"
+                onClick={() => dispatch(addToCart(product))}
+                className="flex-grow-1 py-2 fw-bold">
                 <CartPlus className="me-2" /> CART
               </Button>
               <Button

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import ProductCard from '../components/Productcard';
-import Loading from '../components/Loading';
+import ProductCard from './Productcard';
+import Loading from './Loading';
 import { apiService } from '../api'; // Ensure your api.js has getProducts()
 
 const Clothes = () => {
@@ -12,17 +12,11 @@ const Clothes = () => {
             try {
                  
                 const res = await apiService.getProducts();
-
-                
-                const fashionItems = res.data.filter(item => 
-                    item.category.includes("clothing")
-                );
-
-                setProducts(fashionItems);
+                setProducts(res.data);
             } catch (err) {
                 console.error("Bhai error aagaya:", err);
             } finally {
-                // 3. Smooth transition for Loading GIF
+                
                 setLoading(false);
             }
         };

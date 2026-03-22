@@ -12,13 +12,13 @@ const Header = () => {
   
   const cartItems = useSelector((state) => state.cart.cartItems);
   return (
-    <Navbar expand="lg" sticky="top" className="py-3" bg='transparent'>
+    <Navbar expand="lg" sticky="top" className="py-3" bg='white'>
       <Container>
 
         {/* Logo */}
         <Navbar.Brand href="#home" className="fw-bold fs-4">
-          <span className="text-dark">E</span>
-          <span className="text-primary">Commerce</span>
+          <span className="text-dark">Indi</span>
+          <span className="text-primary">Tronix</span>
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="navbar-nav" />

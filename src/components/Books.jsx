@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import ProductCard from '../components/Productcard'
+import ProductCard from './Productcard'
 import { apiService } from '../api';
+import Loading from './Loading';
 
-const Beautyproducts = () => {
+const Books = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,9 +21,9 @@ const Beautyproducts = () => {
     fetchProducts();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+ 
 
-  return (
+  return (<> {loading ? <Loading /> :
     <div>
       <div className='my-4'>
         <h3 className='my-3'>India's best technology here</h3>
@@ -55,8 +56,9 @@ const Beautyproducts = () => {
           </div>
         ))}
       </div>
-    </div>
+    </div>}
+  </>
   );
 };
 
-export default Beautyproducts ;
+export default Books;

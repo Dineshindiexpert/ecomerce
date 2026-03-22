@@ -14,7 +14,7 @@ const Home = () => {
 
   return (
     <div style={{ backgroundColor: "#f5f6fa", minHeight: "100vh" }}>
-      <Container fluid="lg">
+      <Container fluid="lg" bg="white">
         <Header />
 
         <Row className="mt-3">

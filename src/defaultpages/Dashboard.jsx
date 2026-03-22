@@ -30,7 +30,7 @@ const Dashboard = () => {
     return (<>
         {loading ? <Loading /> :
             <div className="container-fluid px-4 bg-light min-vh-100">
-                <h3 className="py-3">Hero Section</h3>
+                <h3 className="py-3">Trending Fashion</h3>
                 <div className="mb-4"><Pagination /></div>
 
                 <h3 className="mb-3 text-center py-2 fw-bold">Our Products</h3>
