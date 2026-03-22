@@ -21,6 +21,7 @@ import Protectroutes from "../auth/Protectroutes";
 import Apicalling from "../api/Apicalling";
 import Wishlist from "../defaultpages/Wishlist";
 import Loading from "../components/Loading";
+import Profile  from "../pages/Profile";
 // import Apicalling from "../pages/Apicalling";
  
 const AppRoutes = () => {
@@ -59,13 +60,14 @@ const AppRoutes = () => {
           <Route path="cart" element={<Cart />} />
           <Route path='/API' element={<Apicalling/>}/>
           <Route path='/wishlist' element={<Wishlist/>}/>
-           <Route path='/loading' element={<Loading/>}/>
+          <Route path='/loading' element={<Loading/>}/>
+          
 
 
         </Route>
 
       </Route>
-
+      <Route path='/profile' element={<Profile/>}/>
       {/* 404 Page */}
       <Route path="*" element={<NotFound />} />
 

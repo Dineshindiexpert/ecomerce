@@ -13,7 +13,7 @@ export const Price = [0, 100, 200, 300, 500, 1000, 10000];
 
 
 export const Profile = [
-  { name: "My Account", path: "/account" },
+  { name: "My Account", path: "/profile" },
   { name: "Orders", path: "/orders" },
   {
     name: "Logout",
