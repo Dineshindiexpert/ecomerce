@@ -1,4 +1,3 @@
-"use client";
 import { createSlice } from "@reduxjs/toolkit";
 
 export const CartSlice = createSlice({
@@ -20,7 +19,7 @@ export const CartSlice = createSlice({
           id: action.payload.id,  
           title: action.payload.title,
           price: action.payload.price,
-          thumbnail: action.payload.thumbnail,
+          image: action.payload.image,
           quantity: 1,
         });
       }

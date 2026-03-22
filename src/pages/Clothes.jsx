@@ -10,10 +10,10 @@ const Clothes = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                // 1. API Call (Using your centralized apiService)
+                 
                 const res = await apiService.getProducts();
 
-                // 2. Industry Style: Filter only clothing categories
+                
                 const fashionItems = res.data.filter(item => 
                     item.category.includes("clothing")
                 );

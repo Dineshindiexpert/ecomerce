@@ -21,7 +21,7 @@ export const wishlistSlice = createSlice({
                 productID: action.payload.id,
                 title: action.payload.title,
                 price: action.payload.price,
-                thumbnail: action.payload.thumbnail,
+                image: action.payload.image,
             };
             state.wishlistItems.push(newItem);
         },

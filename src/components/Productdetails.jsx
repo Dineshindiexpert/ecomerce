@@ -4,8 +4,7 @@ import { Container, Row, Col, Button, Badge, Spinner } from "react-bootstrap";
 import { StarFill, CartPlus, LightningFill, ArrowLeft, ShieldCheck, Truck, ArrowRepeat } from "react-bootstrap-icons";
 import { motion } from "framer-motion";
 import { apiService } from "../api";
-import Loading from "../components/Loading"; // Optional custom loader
-
+import Loading from "../components/Loading"; 
 const ProductDetails = () => {
   const { id } = useParams();  
   console.log(id)
@@ -31,7 +30,7 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  if (loading) return <Loading />; // optional spinner component
+  if (loading) return <Loading />;  
 
   if (!product) {
     return (

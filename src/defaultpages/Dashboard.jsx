@@ -3,28 +3,21 @@ import axios from 'axios'
 import Pagination from '../components/Pagination'
 import ProductCard from '../components/Productcard'
 import Loading from '../components/Loading'
+import { apiService } from '../api'
 
 const Dashboard = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-   
+
 
     useEffect(() => {
         const fetchProducts = async () => {
+
+
             try {
+                const res = await apiService.getProducts();
 
-                const res = await axios.get('https://dummyjson.com/products');
-
-
-                if (res.data && res.data.products) {
-
-                    const formattedProducts = res.data.products.map(p => ({
-                        ...p,
-                        image: p.thumbnail,
-                        rating: { rate: p.rating, count: p.stock }
-                    }));
-                    setProducts(formattedProducts);
-                }
+                setProducts(res.data);
             } catch (err) {
                 console.error("API Error:", err);
             } finally {

@@ -4,7 +4,7 @@ import { Container, Nav, Navbar, InputGroup, Form, Badge } from "react-bootstrap
 import { Cart, Heart, Search } from "react-bootstrap-icons";
 import Hoverdropdown from "./Hoverdropdown";
 import { Category, Profile } from "../db/comondatabase";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Header = () => {
@@ -27,7 +27,7 @@ const Header = () => {
 
           {/* Center Menu */}
           <Nav className="mx-auto fw-semibold">
-            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link  as={Link} to={"/"}>Home</Nav.Link>
             <Nav.Link href="#contact">Contact</Nav.Link>
             <Nav.Link href="#about">About Us</Nav.Link>
             <Hoverdropdown title="Our Products" objectvalue={Category} />

@@ -19,7 +19,7 @@ const Wishlist = () => {
               <Card className="p-3 h-100 shadow-sm">
                 <Card.Img 
                   variant="top" 
-                  src={item.thumbnail} 
+                  src={item.image} 
                   style={{ height: "150px", objectFit: "contain" }} 
                 />
                 <Card.Body>

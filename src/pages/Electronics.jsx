@@ -1,19 +1,36 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ProductCard from '../components/Productcard'
-// import Products from '../db/Products'
+import { apiService } from '../api';
 
 const Electronics = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await apiService.getProducts();
+        setProducts(res.data);
+      } catch (err) {
+        console.error("API Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
   return (
     <div>
       <div className='my-4'>
-
         <h3 className='my-3'>India's best technology here</h3>
       </div>
-      <div>
-      </div>
-      {/* HORIZONTAL SCROLL */}
+
+      {/* Horizontal scroll section */}
       <div className="d-flex flex-row flex-nowrap overflow-auto pb-3">
-        {Products.map((product) => (
+        {products.map((product) => (
           <div
             key={product.id}
             className="me-3"
@@ -23,9 +40,12 @@ const Electronics = () => {
           </div>
         ))}
       </div>
-      <h3 className="mb-3 text-center py-2">Our Products</h3>
-      <div className="d-flex flex-row   overflow-auto pb-3">
-        {Products.map((product) => (
+
+      <h3 className="mb-3 text-center py-2">Our product</h3>
+
+      {/* Second section */}
+      <div className="d-flex flex-row overflow-auto pb-3">
+        {products.map((product) => (
           <div
             key={product.id}
             className="me-3"
@@ -36,8 +56,7 @@ const Electronics = () => {
         ))}
       </div>
     </div>
+  );
+};
 
-  )
-}
-
-export default Electronics
+export default Electronics;

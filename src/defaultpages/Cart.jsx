@@ -30,8 +30,8 @@ const Cart = () => {
               <Row className="align-items-center g-0 p-3">
                 <Col xs={3} md={2}>
                   <Card.Img
-                    src={item.thumbnail}
-                    style={{ height: "80px", objectFit: "contain" }}
+                    src={item.image}
+                    style={{ height: "80px", objectFit:"contain" }}
                   />
                 </Col>
 
@@ -90,7 +90,7 @@ const Cart = () => {
             </Card>
           ))}
 
-          {/* ✅ Grand Total */}
+          
           <div className="text-end mt-4">
             <h4 className="fw-bold">
               Total: ₹{grandTotal.toFixed(2)}
