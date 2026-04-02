@@ -14,5 +14,8 @@ export const apiService = {
   getCart: (userId) => API.get(`/carts/user/${userId}`),
   
   // User related 
-  getUsers: () => API.get('/users')
+  getUsers: () => API.get('/users'),
+
+  // get the single user profile option 
+  getloginuser: (id) => API.get(`/users/${id}`)
 };

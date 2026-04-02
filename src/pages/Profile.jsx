@@ -1,226 +1,271 @@
-import React from 'react'
-import { Form, Button, Container, Row, Col } from 'react-bootstrap'
-import { useForm } from 'react-hook-form'
-import Header from '../components/Header'
+import React, { useEffect, useState } from 'react';
+import { Form, Button, Container, Row, Col, Spinner } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import Header from '../components/Header';
+import { apiService } from '../api';
+import Loading from '../components/Loading'
 
 const Profile = () => {
-    const {
-        formState: { errors },
-        register,
-        handleSubmit
-    } = useForm({
-        defaultValues: {
-            firstname: "",
-            nickname: "",
-            gender: "",
-            country: "",
-            language: "",
-            time: ""
-        }
-    });
+  const [profile, setProfile] = useState({});
+  const [loading, setLoading] = useState(true);
 
-    const handleOnSubmit = (data) => {
-        console.log("Form Data:", data);
+  const {
+    formState: { errors },
+    register,
+    handleSubmit,
+    reset
+  } = useForm({
+    defaultValues: {
+      firstname: '',
+      nickname: '',
+      gender: 'male',
+      language: 'en-US',
+      time: 'EST',
+      contact: '0123456789',
+      country: 'USA'
+    }
+  });
+
+  // Fetch user data
+  useEffect(() => {
+    const fetchuser = async () => {
+      try {
+        const res = await apiService.getloginuser(1);
+        const data = res.data;
+
+        console.log("API Data:", data);
+
+        setProfile(data);
+
+         
+        reset({
+          firstname: data.name?.firstname || '',
+          nickname: data.username || '',
+          gender: 'male',
+          language: 'en-US',
+          time: 'EST',
+          contact: data.phone || '',
+          country: data.address?.country || 'USA'
+        });
+
+      } catch (err) {
+        console.error("API Error:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
+    fetchuser();
+  }, [reset]);
+
+  const handleOnSubmit = (data) => {
+    console.log("Updated Form Data:", data);
+  };
+
+  if (loading) {
     return (
-        <Container>
-            {/* Header */}
-            <Row className="mb-4">
-                <Col md={12}>
-                    <Header />
-                </Col>
-            </Row>
+      <div className="text-center mt-5">
+        <Loading/>
+      </div>
+    );
+  }
 
-            {/* Profile Info */}
-            <Row className="mb-4">
-                <Col md={12}>
-                    <div className='d-flex justify-content-between align-items-center'>
-                        <div className='d-flex gap-3 align-items-center'>
-                            <img
-                                src="https://www.perfocal.com/blog/content/images/size/w960/2021/01/Perfocal_17-11-2019_TYWFAQ_100_standard-3.jpg"
-                                alt="avatar"
-                                style={{
-                                    width: "90px",
-                                    height: "90px",
-                                    borderRadius: "50%",
-                                    objectFit: "cover"
-                                }}
-                            />
-                            <div>
-                                <p className='mb-0 fw-bold'>Username</p>
-                                <p className='mb-0 text-muted'>useremail@gmail.com</p>
-                            </div>
-                        </div>
+  return (
+    <Container>
+      {/* Header */}
+      <Row className="mb-4">
+        <Col md={12}>
+          <Header />
+        </Col>
+      </Row>
 
-                        <Button size='lg' variant='warning'>
-                            Edit
-                        </Button>
-                    </div>
-                </Col>
-            </Row>
+      {/* Profile Info */}
+      <Row className="mb-4">
+        <Col md={12}>
+          <div className='d-flex justify-content-between align-items-center'>
+            <div className='d-flex gap-3 align-items-center'>
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQT08_1dF0iNLYfRnL2lbqnlXg5QKKofxDew&s"
+                alt="avatar"
+                style={{
+                  width: "90px",
+                  height: "90px",
+                  borderRadius: "50%",
+                  objectFit: "cover"
+                }}
+              />
+              <div>
+                <p className='mb-0 fw-bold'>
+                  {profile.name?.firstname || "Username"}
+                </p>
+                <p className='mb-0 text-muted'>
+                  {profile.email || "useremail@gmail.com"}
+                </p>
+              </div>
+            </div>
 
-            {/* Form */}
-            <Form onSubmit={handleSubmit(handleOnSubmit)}>
-                <Row>
-                    {/* First Name */}
-                    <Col md={6}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                {...register("firstname", {
-                                    required: "First name is required"
-                                })}
-                            />
-                            <div className="text-danger">
-                                {errors?.firstname?.message}
-                            </div>
-                        </Form.Group>
-                    </Col>
+            <Button size='lg' variant='warning'>
+              Edit
+            </Button>
+          </div>
+        </Col>
+      </Row>
 
+      {/* Form */}
+      <Form onSubmit={handleSubmit(handleOnSubmit)}>
+        <Row>
 
-                    {/* Nickname */}
-                    <Col md={6}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Nick Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                {...register("nickname", {
-                                    required: "Nickname is required"
-                                })}
-                            />
-                            <div className="text-danger">
-                                {errors?.nickname?.message}
-                            </div>
-                        </Form.Group>
-                    </Col>
+          {/* First Name */}
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>First Name</Form.Label>
+              <Form.Control
+                type="text"
+                {...register("firstname", {
+                  required: "First name is required"
+                })}
+              />
+              <div className="text-danger">
+                {errors?.firstname?.message}
+              </div>
+            </Form.Group>
+          </Col>
 
-                    {/* Gender */}
-                    <Col md={6}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Gender</Form.Label>
-                            <Form.Select
-                                {...register("gender", {
-                                    required: "Gender is required"
-                                })}
-                            >
-                                <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="not_prefer">Prefer not to say</option>
-                            </Form.Select>
-                            <div className="text-danger">
-                                {errors?.gender?.message}
-                            </div>
-                        </Form.Group>
-                    </Col>
-                    {/* mobile no : */}
-                    <Col md={5}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Contact no :</Form.Label>
+          {/* Nickname */}
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Nick Name</Form.Label>
+              <Form.Control
+                type="text"
+                {...register("nickname", {
+                  required: "Nickname is required"
+                })}
+              />
+              <div className="text-danger">
+                {errors?.nickname?.message}
+              </div>
+            </Form.Group>
+          </Col>
 
-                            <Form.Control
-                                type="number"
-                                {...register("contact", {
-                                    required: "Contact number is required",
+          {/* Gender */}
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Gender</Form.Label>
+              <Form.Select
+                {...register("gender", {
+                  required: "Gender is required"
+                })}
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="not_prefer">Prefer not to say</option>
+              </Form.Select>
+              <div className="text-danger">
+                {errors?.gender?.message}
+              </div>
+            </Form.Group>
+          </Col>
 
-                                    minLength: {
-                                        value: 10,
-                                        message: "Contact number must be exactly 10 digits"
-                                    },
+          {/* Contact */}
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Contact No</Form.Label>
+              <Form.Control
+                type="text"
+                {...register("contact", {
+                  required: "Contact number is required",
+                  // minLength: {
+                  //   value: 10,
+                  //   message: "Must be 10 digits"
+                  // },
+                  // maxLength: {
+                  //   value: 10,
+                  //   message: "Must be 10 digits"
+                  // },
+                  // pattern: {
+                  //   value: /^[0-9]+$/,
+                  //   message: "Only digits allowed"
+                  // }
+                })}
+              />
+              <div className="text-danger">
+                {errors?.contact?.message}
+              </div>
+            </Form.Group>
+          </Col>
 
-                                    maxLength: {
-                                        value: 10,
-                                        message: "Contact number must be exactly 10 digits"
-                                    },
+          {/* Country */}
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Country</Form.Label>
+              <Form.Select
+                {...register("country", {
+                  required: "Country is required"
+                })}
+              >
+                <option value="">Select Country</option>
+                <option value="India">India</option>
+                <option value="USA">USA</option>
+                <option value="China">China</option>
+              </Form.Select>
+              <div className="text-danger">
+                {errors?.country?.message}
+              </div>
+            </Form.Group>
+          </Col>
 
-                                    pattern: {
-                                        value: /^[0-9]+$/,
-                                        message: "Only digits are allowed"
-                                    },
+          {/* Language */}
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Language</Form.Label>
+              <Form.Select
+                {...register("language", {
+                  required: "Language is required"
+                })}
+              >
+                <option value="">Select Language</option>
+                <option value="en-IN">English (India)</option>
+                <option value="en-US">English (USA)</option>
+                <option value="mr-IN">Marathi</option>
+              </Form.Select>
+              <div className="text-danger">
+                {errors?.language?.message}
+              </div>
+            </Form.Group>
+          </Col>
 
-                                    validate: (value) =>
-                                        !value.includes(" ") || "Contact number cannot contain spaces"
-                                })}
-                            />
+          {/* Time Zone */}
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Time Zone</Form.Label>
+              <Form.Select
+                {...register("time", {
+                  required: "Time zone is required"
+                })}
+              >
+                <option value="">Select Time Zone</option>
+                <option value="IST">India Standard Time</option>
+                <option value="EST">Eastern Standard Time</option>
+                <option value="PST">Pacific Standard Time</option>
+              </Form.Select>
+              <div className="text-danger">
+                {errors?.time?.message}
+              </div>
+            </Form.Group>
+          </Col>
 
-                            <div className="text-danger">
-                                {errors?.contact?.message}
-                            </div>
-                        </Form.Group>
+        </Row>
 
-                    </Col>
-                    {/* Country */}
-                    <Col md={6}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Country</Form.Label>
-                            <Form.Select
-                                {...register("country", {
-                                    required: "Country is required"
-                                })}
-                            >
-                                <option value="">Select Country</option>
-                                <option value="india">India</option>
-                                <option value="usa">USA</option>
-                                <option value="china">China</option>
-                            </Form.Select>
-                            <div className="text-danger">
-                                {errors?.country?.message}
-                            </div>
-                        </Form.Group>
-                    </Col>
+        {/* Submit */}
+        <div className="text-end">
+          <Button type="submit" variant="primary">
+            Update Details
+          </Button>
+        </div>
+      </Form>
+    </Container>
+  );
+};
 
-                    {/* Language */}
-                    <Col md={6}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Language</Form.Label>
-                            <Form.Select
-                                {...register("language", {
-                                    required: "Language is required"
-                                })}
-                            >
-                                <option value="">Select Language</option>
-                                <option value="en-IN">English (India)</option>
-                                <option value="en-US">English (USA)</option>
-                                <option value="mr-IN">Marathi</option>
-                            </Form.Select>
-                            <div className="text-danger">
-                                {errors?.language?.message}
-                            </div>
-                        </Form.Group>
-                    </Col>
-
-                    {/* Time Zone */}
-                    <Col md={6}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Time Zone</Form.Label>
-                            <Form.Select
-                                {...register("time", {
-                                    required: "Time zone is required"
-                                })}
-                            >
-                                <option value="">Select Time Zone</option>
-                                <option value="IST">India Standard Time (IST)</option>
-                                <option value="EST">Eastern Standard Time (EST)</option>
-                                <option value="PST">Pacific Standard Time (PST)</option>
-                            </Form.Select>
-                            <div className="text-danger">
-                                {errors?.time?.message}
-                            </div>
-                        </Form.Group>
-                    </Col>
-                </Row>
-
-                {/* Submit Button */}
-                <div className="text-end">
-                    <Button type="submit" variant="primary">
-                        Update Details
-                    </Button>
-                </div>
-            </Form>
-        </Container>
-    )
-}
-
-export default Profile
+export default Profile;

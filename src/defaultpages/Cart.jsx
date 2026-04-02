@@ -1,18 +1,58 @@
 "use client";
-import React from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { Cart as CartIcon, PatchMinus, PatchPlus } from "react-bootstrap-icons";
+import React, { useState } from "react";
+import {Container,Row,Col,Card,Button,Form,InputGroup,Nav} from "react-bootstrap";
+import {ArrowLeft,Cart as CartIcon,PatchMinus,PatchPlus,} from "react-bootstrap-icons";
 import { useSelector, useDispatch } from "react-redux";
-import {removeFromcartitems,incrementQty,decrementQty,} from "../store/slice/CartSlice";
+import {removeFromcartitems,incrementQty,decrementQty,applyCoupon,} from "../store/slice/CartSlice";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const { cartItems, coupon, discountValue } = useSelector(
+    (state) => state.cart
+  );
+
+  const [couponCode, setCouponCode] = useState("");
+
+  const handleApplyCoupon = () => {
+    dispatch(applyCoupon(couponCode));
+    setCouponCode("");
+  };
+
+  const handleRemoveCoupon = () => {
+    dispatch(applyCoupon("")); 
+  };
+
+  const shippingCost = 14.9;
 
   const grandTotal = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
+
+  const totalOriginalPrice = cartItems.reduce(
+    (acc, item) =>
+      acc + (item.originalPrice || item.price) * item.quantity,
+    0
+  );
+
+  const totalDiscount = totalOriginalPrice - grandTotal;
+
+  const discountPercentage =
+    totalOriginalPrice > 0
+      ? Math.round((totalDiscount / totalOriginalPrice) * 100)
+      : 0;
+
+  const finalTotal = Math.max(
+    grandTotal + shippingCost - discountValue,
+    0
+  );
+
+  const formatCurrency = (amount) =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+    }).format(amount);
 
   return (
     <Container className="my-5">
@@ -22,90 +62,207 @@ const Cart = () => {
       </h2>
 
       {cartItems.length === 0 ? (
-        <p className="lead text-center">Your cart is empty.</p>
+        <div className="text-center">
+          <p className="lead">Your cart is empty.</p>
+          <Button>
+            <Nav.Link as={Link} to={"/"}>
+              <ArrowLeft /> Continue Shopping
+            </Nav.Link>
+          </Button>
+        </div>
       ) : (
-        <>
-          {cartItems.map((item) => (
-            <Card key={item.id} className="mb-3 shadow-sm border-0">
-              <Row className="align-items-center g-0 p-3">
-                <Col xs={3} md={2}>
-                  <Card.Img
-                    src={item.image}
-                    style={{ height: "80px", objectFit:"contain" }}
-                  />
-                </Col>
+        <Row>
+          {/* CART ITEMS */}
+          <Col md={8}>
+            {cartItems.map((item) => (
+              <Card key={item.id} className="mb-3 shadow-sm border-0">
+                <Row className="align-items-center g-0 p-3">
+                  <Col xs={3} md={2}>
+                    <Card.Img
+                      src={item.image}
+                      alt={item.title}
+                      style={{
+                        height: "80px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </Col>
 
-                <Col xs={9} md={3}>
-                  <Card.Body className="py-0">
-                    <Card.Title className="h6 mb-1">
-                      {item.title}
-                    </Card.Title>
-                    <Card.Subtitle className="text-primary">
-                      ₹{item.price}
-                    </Card.Subtitle>
-                  </Card.Body>
-                </Col>
+                  <Col xs={9} md={3}>
+                    <Card.Body className="py-0">
+                      <Card.Title className="h6 mb-1">
+                        {item.title}
+                      </Card.Title>
 
-                
-                <Col xs={6} md={3} className="text-center">
-                  <Button
-                   className=""
-                    size="lg"
-                    variant="secondary"
-                    onClick={() => dispatch(decrementQty(item.id))}
-                  >
-                    <PatchMinus/>
-                  </Button>
+                      <Card.Subtitle className="text-primary">
+                        {formatCurrency(item.price)}
 
-                  <span className="mx-2">{item.quantity}</span>
+                        {item.originalPrice &&
+                          item.originalPrice > item.price && (
+                            <>
+                              <span className="text-muted text-decoration-line-through ms-2">
+                                {formatCurrency(item.originalPrice)}
+                              </span>
 
-                  <Button
-                   
-                    size="lg"
-                    variant="secondary"
-                    onClick={() => dispatch(incrementQty(item.id))}
-                  >
-                    <PatchPlus/>
-                  </Button>
-                </Col>
+                              <span className="text-success ms-2">
+                                ({item.discountPercentage}% OFF)
+                              </span>
+                            </>
+                          )}
+                      </Card.Subtitle>
+                    </Card.Body>
+                  </Col>
 
-                 
-                <Col xs={6} md={2} className="text-end fw-bold">
-                  ₹{item.price * item.quantity}
-                </Col>
+                  <Col xs={6} md={3} className="text-center">
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      disabled={item.quantity === 1}
+                      onClick={() =>
+                        dispatch(decrementQty(item.id))
+                      }
+                    >
+                      <PatchMinus />
+                    </Button>
 
-                
-                <Col xs={12} md={2} className="text-end">
-                  <Button
-                    variant="danger"
-                    size="lg"
-                    onClick={() =>
-                      dispatch(removeFromcartitems(item.id))
+                    <span className="mx-2">{item.quantity}</span>
+
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() =>
+                        dispatch(incrementQty(item.id))
+                      }
+                    >
+                      <PatchPlus />
+                    </Button>
+                  </Col>
+
+                  <Col xs={6} md={2} className="text-end fw-bold">
+                    {formatCurrency(item.price * item.quantity)}
+                  </Col>
+
+                  <Col xs={12} md={2} className="text-end mt-2 mt-md-0">
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() =>
+                        dispatch(removeFromcartitems(item.id))
+                      }
+                    >
+                      Remove
+                    </Button>
+                  </Col>
+                </Row>
+              </Card>
+            ))}
+          </Col>
+
+          {/* ORDER SUMMARY */}
+          <Col md={4}>
+            <Card className="shadow-sm">
+              <Card.Body>
+                <Card.Title>Order Summary</Card.Title>
+
+                {/* Subtotal */}
+                <Row className="mb-2">
+                  <Col>Subtotal</Col>
+                  <Col className="text-end">
+                    {formatCurrency(grandTotal)}
+                  </Col>
+                </Row>
+
+                {/* Product Discount */}
+                {totalDiscount > 0 && (
+                  <Row className="mb-2 text-success">
+                    <Col>Product Discount</Col>
+                    <Col className="text-end">
+                      {formatCurrency(totalDiscount)} (
+                      {discountPercentage}% OFF)
+                    </Col>
+                  </Row>
+                )}
+
+                {/* Coupon Discount */}
+                {discountValue > 0 && (
+                  <Row className="mb-2 text-success">
+                    <Col>Coupon </Col>
+                    <Col className="text-end">
+                      -{formatCurrency(discountValue)}
+                    </Col>
+                  </Row>
+                )}
+
+                {/* Shipping */}
+                <Row className="mb-2">
+                  <Col>Shipping</Col>
+                  <Col className="text-end">
+                    {formatCurrency(shippingCost)}
+                  </Col>
+                </Row>
+
+                <hr />
+
+                {/* TOTAL */}
+                <Row className="fw-bold">
+                  <Col>Total</Col>
+                  <Col className="text-end">
+                    {formatCurrency(finalTotal)}
+                  </Col>
+                </Row>
+
+                <Button
+                  className="w-100 mt-3 text-white"
+                  style={{ backgroundColor: "#F67D31" }}
+                >
+                  Proceed to Checkout
+                </Button>
+
+                <hr />
+
+                {/* COUPON INPUT */}
+                <Form.Label className="fw-bold">
+                  Apply Coupon
+                </Form.Label>
+
+                <InputGroup>
+                  <Form.Control
+                    placeholder="Enter coupon code"
+                    value={couponCode}
+                    onChange={(e) =>
+                      setCouponCode(e.target.value)
                     }
+                  />
+                  <Button
+                    variant="dark"
+                    onClick={handleApplyCoupon}
+                    disabled={!couponCode.trim()}
                   >
-                    Remove
+                    Apply
                   </Button>
-                </Col>
-              </Row>
+                </InputGroup>
+
+                {/* APPLIED COUPON */}
+                {coupon && (
+                  <Row className="mt-3 align-items-center">
+                    <Col className="text-success">
+                      Coupon Applied: <strong>{coupon}</strong>
+                    </Col>
+                    <Col className="text-end">
+                      <Button
+                        size="sm"
+                        variant="outline-danger"
+                        onClick={handleRemoveCoupon}
+                      >
+                        Remove
+                      </Button>
+                    </Col>
+                  </Row>
+                )}
+              </Card.Body>
             </Card>
-          ))}
-
-          
-          <div className="text-end mt-4">
-            <h4 className="fw-bold">
-              Total: ₹{grandTotal.toFixed(2)}
-            </h4>
-
-            <Button
-              variant="warning"
-              size="lg"
-              className="text-white mt-2"
-              style={{ backgroundColor: "#F67D31" }}
-            >
-              Proceed to Checkout
-            </Button>
-          </div>
-        </>
+          </Col>
+        </Row>
       )}
     </Container>
   );

@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Container, Row, Col, Button, Badge, Spinner } from "react-bootstrap";
-import { StarFill, CartPlus, LightningFill, ArrowLeft, ShieldCheck, Truck, ArrowRepeat } from "react-bootstrap-icons";
+import { Container, Row, Col, Button, Badge } from "react-bootstrap";
+import {StarFill,LightningFill,ArrowLeft,ShieldCheck,Truck,ArrowRepeat,Cart,Check2,} from "react-bootstrap-icons";
 import { motion } from "framer-motion";
 import { apiService } from "../api";
 import Loading from "../components/Loading";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/slice/CartSlice";
+
 const ProductDetails = () => {
-  // redux calling
-  const dispatch = useDispatch();
-  const { id } = useParams();
-  console.log(id)
+  const { id } = useParams(); 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
+   
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -33,6 +36,16 @@ const ProductDetails = () => {
 
     fetchProduct();
   }, [id]);
+ 
+  const isInCart = cartItems?.some(
+    (item) => item.id === product?.id
+  );
+
+  const handleCart = () => {
+    if (product) {
+      dispatch(addToCart(product));
+    }
+  };
 
   if (loading) return <Loading />;
 
@@ -40,7 +53,7 @@ const ProductDetails = () => {
     return (
       <Container className="text-center py-5">
         <h2 className="display-4">Oops! Product Not Found</h2>
-        <Button variant="primary" onClick={() => navigate("/")} className="mt-3">
+        <Button variant="primary" onClick={() => navigate("/")}>
           Back to Home
         </Button>
       </Container>
@@ -59,7 +72,7 @@ const ProductDetails = () => {
         </Button>
 
         <Row className="bg-white rounded-4 shadow-sm overflow-hidden g-0">
-          <Col lg={6} className="p-4 p-md-5 border-end d-flex align-items-center justify-content-center bg-white">
+          <Col lg={6} className="p-4 d-flex align-items-center justify-content-center">
             <motion.img
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -70,66 +83,37 @@ const ProductDetails = () => {
             />
           </Col>
 
-          <Col lg={6} className="p-4 p-md-5">
-            <div className="mb-3">
-              <Badge bg="secondary" className="text-capitalize px-3 py-2 mb-2">
-                {product.category}
-              </Badge>
-              <h1 className="fw-bold text-dark h2">{product.title}</h1>
+          <Col lg={6} className="p-4">
+            <Badge bg="secondary" className="mb-2 text-capitalize">
+              {product.category}
+            </Badge>
+
+            <h1 className="fw-bold h4">{product.title}</h1>
+
+            <div className="d-flex align-items-center mb-3">
+              <StarFill className="text-warning me-1" />
+              {product.rating?.rate}
             </div>
 
-            <div className="d-flex align-items-center mb-4">
-              <div className="bg-success text-white px-2 py-1 rounded d-flex align-items-center me-2">
-                <span className="fw-bold me-1">{product.rating?.rate}</span>
-                <StarFill size={14} />
-              </div>
-              <span className="text-muted border-start ps-2">Stock: {product.rating?.count} units left</span>
-            </div>
+            <h2 className="text-primary fw-bold">₹{product.price}</h2>
 
-            <h2 className="text-primary fw-bold display-6 mb-4">₹{product.price}</h2>
+            <p className="text-muted small">{product.description}</p>
 
-            <hr />
-            <div className="my-4">
-              <h5 className="fw-bold">Product Description</h5>
-              <p className="text-muted small lh-base">{product.description}</p>
-            </div>
+            <div className="d-flex gap-3 mt-4">
+              {isInCart ? (
+                <Button variant="success">
+                  <Check2 /> Added to cart
+                </Button>
+              ) : (
+                <Button onClick={handleCart} variant="outline-dark">
+                  <Cart className="me-2" />
+                  Add to Cart
+                </Button>
+              )}
 
-            <Row className="g-2 mb-4 text-center">
-              <Col xs={4}>
-                <div className="p-2 border rounded bg-light" style={{ fontSize: "9px" }}>
-                  <Truck size={18} />
-                  <br />
-                  FAST DELIVERY
-                </div>
-              </Col>
-              <Col xs={4}>
-                <div className="p-2 border rounded bg-light" style={{ fontSize: "9px" }}>
-                  <ArrowRepeat size={18} />
-                  <br />
-                  7 DAYS RETURN
-                </div>
-              </Col>
-              <Col xs={4}>
-                <div className="p-2 border rounded bg-light" style={{ fontSize: "9px" }}>
-                  <ShieldCheck size={18} />
-                  <br />
-                  WARRANTY
-                </div>
-              </Col>
-            </Row>
-
-            <div className="d-flex gap-3">
-              <Button variant="outline-dark"
-                onClick={() => dispatch(addToCart(product))}
-                className="flex-grow-1 py-2 fw-bold">
-                <CartPlus className="me-2" /> CART
-              </Button>
-              <Button
-                variant="warning"
-                className="flex-grow-1 py-2 fw-bold text-white"
-                style={{ backgroundColor: "#F67D31", border: "none" }}
-              >
-                <LightningFill className="me-2" /> BUY
+              <Button variant="warning">
+                <LightningFill className="me-2" />
+                Buy
               </Button>
             </div>
           </Col>

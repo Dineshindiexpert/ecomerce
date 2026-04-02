@@ -1,12 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../auth/login";
 import Signup from "../auth/signup";
-
 import Home from "../pages/Home";
 import Dashboard from "../defaultpages/Dashboard";
 import Cart from "../defaultpages/Cart";
 import NotFound from "../pages/NotFound";
-
 import Electronics from "../components/Electronics";
 import Sports from "../components/Sports";
 import Clothes from "../components/Clothes";
@@ -22,6 +20,7 @@ import Apicalling from "../api/Apicalling";
 import Wishlist from "../defaultpages/Wishlist";
 import Loading from "../components/Loading";
 import Profile  from "../pages/Profile";
+import OrderPage from "../components/orderpage";
 // import Apicalling from "../pages/Apicalling";
  
 const AppRoutes = () => {
@@ -55,12 +54,12 @@ const AppRoutes = () => {
           <Route path="home-kitchen" element={<Homeandkitchen />} />
           <Route path="beauty" element={<Beautyproducts />} />
           <Route path="books" element={<Books />} />
-
           <Route path="product/:id" element={<Productdetails />} />
           <Route path="cart" element={<Cart />} />
           <Route path='/API' element={<Apicalling/>}/>
           <Route path='/wishlist' element={<Wishlist/>}/>
           <Route path='/loading' element={<Loading/>}/>
+          <Route path='/orders' element={<OrderPage/>}/>
           
 
 

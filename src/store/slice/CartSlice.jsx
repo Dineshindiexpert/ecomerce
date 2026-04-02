@@ -4,6 +4,8 @@ export const CartSlice = createSlice({
   name: "cart",
   initialState: {
     cartItems: [],
+    coupon: null,
+    discountValue: 0,
   },
   reducers: {
     addToCart: (state, action) => {
@@ -12,19 +14,28 @@ export const CartSlice = createSlice({
       );
 
       if (existingItem) {
-        
         existingItem.quantity += 1;
       } else {
+        // Calculate discount % (if not already provided)
+        const discountPercentage =
+          action.payload.discountPercentage ||
+          Math.round(
+            ((action.payload.originalPrice - action.payload.price) /
+              action.payload.originalPrice) *
+            100
+          );
+
         state.cartItems.push({
-          id: action.payload.id,  
+          id: action.payload.id,
           title: action.payload.title,
           price: action.payload.price,
+          originalPrice: action.payload.originalPrice || action.payload.price,
+          discountPercentage: discountPercentage,
           image: action.payload.image,
           quantity: 1,
         });
       }
     },
-
     removeFromcartitems: (state, action) => {
       state.cartItems = state.cartItems.filter(
         (item) => item.id !== action.payload
@@ -45,16 +56,38 @@ export const CartSlice = createSlice({
 
       if (item && item.quantity > 1) {
         item.quantity -= 1;
+
+      }
+    },
+    applyCoupon: (state, action) => {
+      const code = action.payload;
+
+
+      if (!code) {
+        state.coupon = null;
+        state.discountValue = 0;
+        return;
+      }
+      if (code === "DISC5") {
+        state.coupon = code;
+        state.discountValue = 5;
+      } else if (code === "DISC10") {
+        state.coupon = code;
+        state.discountValue = 10;
+      } else {
+        state.coupon = null;
+        state.discountValue = 0;
       }
     },
   },
-});
 
-export const {
-  addToCart,
-  removeFromcartitems,
-  incrementQty,
-  decrementQty,
-} = CartSlice.actions;
+  removeCoupon: (state) => {
+    state.coupon = null;
+    state.discountValue = 0;
+  },
+}
+);
+
+export const { addToCart, removeFromcartitems, incrementQty, decrementQty, applyCoupon, removeCoupon } = CartSlice.actions;
 
 export default CartSlice.reducer;
